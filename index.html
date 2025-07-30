@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>backlink identifier</title>
+  <style>
+    /* Hacker background: animated code rain, neon grid, scanlines, and flicker */
+    body {
+      background: #000;
+      color: #b4ffb4;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+      min-height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      position: relative;
+    }
+    /* CRT scanlines and flicker */
+    body::after {
+      content: "";
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0) 0px,
+        rgba(255,255,255,0) 2px,
+        rgba(120,255,120,0.035) 3px,
+        rgba(0,0,0,0) 4px
+      );
+      mix-blend-mode: color-dodge;
+      opacity: 0.38;
+      animation: flicker 1.8s infinite linear alternate;
+      pointer-events: none;
+    }
+    @keyframes flicker {
+      0% { opacity: 0.36;}
+      50% { opacity: 0.45;}
+      70% { opacity: 0.33;}
+      100% { opacity: 0.40;}
+    }
+    /* Matrix code fall background */
+    #matrix-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.14;
+    }
+    /* Neon grid border */
+    .container {
+      position: relative;
+      max-width: 512px;
+      margin: 7vh auto 0 auto;
+      background: rgba(15,20,25,0.86);
+      box-shadow: 0 6px 60px #08ff89cc, 0 1.5px 0px #00cccc88;
+      padding: 2.8rem 2rem 2.3rem 2rem;
+      border-radius: 17px;
+      z-index: 2;
+      border: 2.4px solid #32ff88cc;
+      outline: 1.6px dashed #44f8;
+      /* Animate border glow */
+      animation: glow-border 2.4s infinite alternate;
+    }
+    @keyframes glow-border {
+      from { box-shadow: 0 0 32px #10fc60c0, 0 1.5px 0px #00deb788;}
+      to   { box-shadow: 0 0 52px #00ffcccc, 0 2.2px 6px #08ffb4cc;}
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.1rem;
+      font-weight:900;
+      letter-spacing: 0.08em;
+      color: #00fa42;
+      text-shadow:
+         0 0 16px #08ff77, /* Mood glow */
+         0 0 5px #183,     /* Subtle CRT edge */
+         1px 1.5px 1px #000;
+      background: linear-gradient(90deg, #00fc7d 30%, #00f0f6 60%, #ffff57 90%);
+      -webkit-text-fill-color: transparent;
+      filter: brightness(1.1) contrast(1.12);
+      margin-bottom: 2.2rem;
+      text-transform: uppercase;
+    }
+    form {
+      margin-bottom: 1.1rem;
+      text-align: center;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+    input[type="text"] {
+      padding: 0.7rem 1.3rem;
+      width: 65%;
+      font-size: 1.17rem;
+      background: #011b12;
+      color: #50fc87;
+      border: 2px solid #1effa3;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px #03c17333;
+      outline: none;
+      transition: box-shadow 0.18s, border 0.2s;
+      font-family: inherit;
+      letter-spacing: 0.055em;
+      animation: input-glow 2.6s infinite alternate;
+    }
+    @keyframes input-glow {
+      0% { box-shadow: 0 0 4px #03e1ff77;}
+      100% { box-shadow: 0 0 11px #00fd58c7;}
+    }
+    input[type="text"]:focus {
+      box-shadow: 0 0 13px #24fca6, 0 2px 12px #005c3566;
+      border: 2px solid #39ffd3;
+      color: #adffc1;
+      background: #001a10;
+    }
+    button {
+      padding: 0.71rem 1.25rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 7px;
+      background: linear-gradient(90deg, #01ff74 65%, #0cbecf 100%);
+      color: #020c12;
+      font-family: inherit;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      box-shadow: 0 3px 14px #00ffc866, 0 1px 2px #002;
+      text-shadow: 0 1px 6px #34ffd677;
+      transition: background 0.23s, transform 0.15s, filter 0.17s;
+      filter: brightness(1.16);
+    }
+    button:active { filter: brightness(0.88);}
+    button:hover:not(:disabled) {
+      background: linear-gradient(90deg, #0cbecf, #01ff74 70%);
+      transform: translateY(-2px) scale(1.048);
+      filter: brightness(1.30);
+    }
+    button:disabled {
+      background: #366;
+      color: #8cfdbe;
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    #results {
+      background: #0e1a14;
+      color: #95fa8e;
+      padding: 1.32rem 1rem;
+      border-radius: 8px;
+      min-height: 70px;
+      border: 1.7px solid #37fcb6;
+      margin-top: 11px;
+      font-size: 1.08rem;
+      box-shadow: 0 2.5px 16px #39ffc422;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+      filter: brightness(1.13);
+      word-spacing: 0.03em;
+      letter-spacing: 0.012em;
+      text-shadow: 0 1px 6px #11f08c3d;
+      overflow-x: auto;
+      background-image: linear-gradient(0deg, transparent 70%, #00ff7910 100%);
+    }
+    .valid {
+      color: #00fb86;
+      font-weight: 600;
+      margin-bottom: 0.56rem;
+      letter-spacing: .1px;
+      text-shadow: 0 0 18px #16ff7d22, 0 2px 5px #12da4488;
+      filter: drop-shadow(0 0 5px #00fa3f75);
+    }
+    .error {
+      color: #ff3c92;
+      font-style: italic;
+      text-shadow: 0 1px 10px #fd36a359;
+      filter: brightness(1.13);
+    }
+    a {
+      color: #0ef9e7;
+      text-shadow: 0 0 5px #00ffe2, 0 1px 8px #20e8be22;
+      word-break: break-all;
+    }
+    a:visited { color: #61fa76; }
+    @media (max-width: 600px) {
+      .container { max-width: 98vw; padding: 1em .55em 1.2em .8em; }
+      h1 { font-size: 1.18em; }
+      input[type="text"] { font-size: .98em; }
+      button { font-size: 0.94em;}
+    }
+  </style>
+  <!-- Fira Mono font for hacker vibe -->
+  <link href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Matrix code background canvas -->
+  <canvas id="matrix-bg"></canvas>
+  <div class="container">
+    <h1>backlink identifier</h1>
+    <form id="codeForm">
+      <input type="text" id="codeInput" placeholder="Paste backhalf code here" autocomplete="off" required />
+      <button type="submit">Check URLs</button>
+    </form>
+    <div id="results">Enter a code and submit to check URLs.</div>
+  </div>
+  <script>
+    /* Matrix code rain effect */
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    let fontSize = 18;
+    let columns = Math.floor(w / fontSize);
+    let drops = [];
+    for (let x = 0; x < columns; x++) drops[x] = Math.random()*h/fontSize|0;
+    function matrix() {
+      ctx.fillStyle = 'rgba(5,8,19,0.26)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.font = fontSize + "px Fira Mono, monospace";
+      ctx.fillStyle = "#23fd2a";
+      for (let i = 0; i < columns; i++) {
+        let chr = String.fromCharCode(0x30A0 + Math.random() * 96); // Katakana or random letter
+        ctx.fillText(chr, i * fontSize, drops[i] * fontSize);
+        if (Math.random() > 0.978) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(matrix, 55);
+    window.addEventListener('resize', () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      columns = Math.floor(w / fontSize);
+      drops = [];
+      for (let x = 0; x < columns; x++) drops[x] = Math.random()*h/fontSize|0;
+    });
+
+    // Core app logic
+    const form = document.getElementById("codeForm");
+    const input = document.getElementById("codeInput");
+    const resultsDiv = document.getElementById("results");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const code = input.value.trim();
+      if (!code) {
+        resultsDiv.textContent = "Please enter a code.";
+        return;
+      }
+      resultsDiv.textContent = "Checking URLs, please wait...";
+      form.querySelector("button").disabled = true;
+      try {
+        const resp = await fetch("http://localhost:5000/check", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({code})
+        });
+        if (!resp.ok) {
+          const errData = await resp.json();
+          resultsDiv.textContent = `Error: ${errData.error || resp.statusText}`;
+          form.querySelector("button").disabled = false;
+          return;
+        }
+        const data = await resp.json();
+        resultsDiv.innerHTML = "";
+        let foundAny = false;
+        data.forEach(item => {
+          if (item.valid) {
+            foundAny = true;
+            resultsDiv.innerHTML += `<div class="valid">✅ Valid link found: <a href="${item.url}" target="_blank">${item.url}</a></div>`;
+          } else if (item.error) {
+            resultsDiv.innerHTML += `<div class="error">⚠️ Error checking ${item.url}: ${item.error}</div>`;
+          }
+        });
+        if (!foundAny) {
+          resultsDiv.textContent = "No valid links found.";
+        }
+      } catch (err) {
+        resultsDiv.textContent = "An error occurred: " + err.message;
+      }
+      form.querySelector("button").disabled = false;
+    });
+  </script>
+</body>
+</html>
