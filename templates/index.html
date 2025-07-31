@@ -4,19 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>backlink identifier</title>
+  <link href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700&display=swap" rel="stylesheet">
   <style>
-    /* Cleaner hacker background with subtle effects */
-    body {
-      background: #0a0b0d;
-      color: #c2ffc2;
-      font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-      min-height: 100vh;
+    html, body {
       margin: 0;
-      position: relative;
-      overflow-x: hidden;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
     }
-    
-    /* Subtle scanlines - less intrusive */
+
+    body {
+      background-color: #0a0b0d;
+      background-image: url("{{ url_for('static', filename='backlin.png') }}");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+      color: #f5f5f5;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    }
+
     body::after {
       content: "";
       pointer-events: none;
@@ -27,87 +34,69 @@
         to bottom,
         rgba(255,255,255,0) 0px,
         rgba(255,255,255,0) 3px,
-        rgba(120,255,120,0.015) 4px,
+        rgba(255,255,255,0.02) 4px,
         rgba(0,0,0,0) 5px
       );
-      opacity: 0.3;
-      pointer-events: none;
+      opacity: 0.25;
     }
-    
-    /* Matrix background with lower opacity */
-    #matrix-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.08;
-    }
-    
-    /* Wider, cleaner container */
+
     .container {
       width: 670px;
       max-width: 97vw;
       margin: 7vh auto 0 auto;
       background: #151718;
-      border: 1px solid #2d3237;
+      border: 1px solid #333;
       border-radius: 10px;
-      box-shadow: 0 4px 48px #31ffae15;
+      box-shadow: 0 4px 48px #ffffff15;
       padding: 2.25rem 2.35rem 2.2rem 2.35rem;
       z-index: 1;
     }
-    
-    /* Clean title without gradient background */
+
     h1 {
       text-align: left;
       font-size: 2.4rem;
       font-weight: 700;
       letter-spacing: 0.1em;
-      color: #e8ffe8;
-      text-shadow: 0 0 8px rgba(8,255,119,0.4);
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.2);
       margin-bottom: 2.5rem;
       text-transform: uppercase;
-      background: none !important;
-      -webkit-text-fill-color: unset !important;
-      filter: none !important;
     }
-    
-    /* Improved form layout */
+
     form {
       margin-bottom: 1.5rem;
       display: flex;
       gap: 16px;
       align-items: stretch;
     }
-    
-    /* Cleaner input styling */
+
     input[type="text"] {
       flex: 1;
       padding: 1rem 1.4rem;
       font-size: 1.1rem;
-      background: #0f1a15;
-      color: #70ff90;
-      border: 1.5px solid #2eff8f;
+      background: #1c1e20;
+      color: #ffffff;
+      border: 1.5px solid #ccc;
       border-radius: 8px;
       outline: none;
       transition: all 0.2s ease;
       font-family: inherit;
       letter-spacing: 0.03em;
     }
-    
+
     input[type="text"]:focus {
-      border-color: #5fff9f;
-      box-shadow: 0 0 0 2px rgba(95,255,159,0.2);
-      background: #0a1510;
-      color: #90ffa0;
+      border-color: #f5f5f5;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.15);
+      background: #252728;
+      color: #ffffff;
     }
-    
-    /* Minimalist button */
+
     button {
       padding: 1rem 2rem;
       font-size: 1rem;
       border: none;
       border-radius: 8px;
-      background: #20ff80;
+      background: #f5f5f5;
       color: #0a1a0f;
       font-family: inherit;
       font-weight: 600;
@@ -115,85 +104,79 @@
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
-      box-shadow: 0 2px 12px rgba(32,255,128,0.2);
+      box-shadow: 0 2px 12px rgba(255,255,255,0.15);
     }
-    
+
     button:hover:not(:disabled) {
-      background: #40ff90;
+      background: #ffffff;
       transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(64,255,144,0.3);
+      box-shadow: 0 4px 16px rgba(255,255,255,0.3);
     }
-    
+
     button:active {
       transform: translateY(0);
     }
-    
+
     button:disabled {
-      background: #4a6a4a;
-      color: #8fdf8f;
+      background: #999;
+      color: #ddd;
       cursor: not-allowed;
       opacity: 0.6;
     }
-    
-    /* Wider, cleaner results box */
+
     #results {
       background: #111a16;
-      color: #b8ffb8;
+      color: #eaeaea;
       padding: 1.5rem;
       border-radius: 8px;
       min-height: 120px;
       width: 100%;
-      border: 1px solid #37ff9f;
+      border: 1px solid #ccc;
       font-size: 1rem;
       font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
       letter-spacing: 0.02em;
       line-height: 1.6;
       overflow-x: auto;
-      box-shadow: 0 2px 16px rgba(55,255,159,0.1);
+      box-shadow: 0 2px 16px rgba(255,255,255,0.08);
     }
-    
+
     .valid {
-      color: #00fb86;
+      color: #ffffff;
       font-weight: 600;
       margin-bottom: 0.8rem;
-      letter-spacing: .1px;
-      text-shadow: 
-        0 0 10px #16ff7d44,
-        0 0 20px #16ff7d22,
-        0 2px 5px #12da4488;
-      filter: drop-shadow(0 0 8px #00fa3f75);
+      text-shadow: 0 0 10px #ffffff33;
+      filter: drop-shadow(0 0 8px #ffffff44);
     }
-    
+
     .error {
       color: #ff6b8a;
       font-style: italic;
       margin-bottom: 0.8rem;
     }
-    
+
     a {
-      color: #40d4ff;
+      color: #ffffff;
       text-decoration: none;
-      border-bottom: 1px dotted #40d4ff;
+      border-bottom: 1px dotted #ffffff;
       word-break: break-all;
     }
-    
+
     a:hover {
-      color: #60e4ff;
+      color: #dddddd;
       border-bottom-style: solid;
     }
-    
-    a:visited { 
-      color: #80ff95; 
+
+    a:visited {
+      color: #cccccc;
     }
-    
-    /* Responsive design */
+
     @media (max-width: 900px) {
-      .container { 
-        max-width: 95vw; 
-        padding: 1.5rem 1rem; 
+      .container {
+        max-width: 95vw;
+        padding: 1.5rem 1rem;
       }
-      h1 { 
-        font-size: 1.8rem; 
+      h1 {
+        font-size: 1.8rem;
         text-align: center;
       }
       form {
@@ -205,28 +188,24 @@
         padding: 1rem;
       }
     }
-    
+
     @media (max-width: 600px) {
-      .container { 
-        padding: 1rem 0.8rem; 
+      .container {
+        padding: 1rem 0.8rem;
       }
-      h1 { 
-        font-size: 1.5rem; 
+      h1 {
+        font-size: 1.5rem;
       }
-      input[type="text"] { 
-        font-size: 1rem; 
+      input[type="text"] {
+        font-size: 1rem;
       }
-      button { 
+      button {
         font-size: 0.95rem;
       }
     }
   </style>
-  <!-- Fira Mono font for clean monospace look -->
-  <link href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Matrix code background canvas -->
-  <canvas id="matrix-bg"></canvas>
   <div class="container">
     <div class="title"><h1>backlink identifier</h1></div>
     <form id="codeForm">
@@ -235,40 +214,8 @@
     </form>
     <div id="results">Enter a code and submit to check URLs.</div>
   </div>
-  <script>
-    /* Matrix code rain effect - more subtle */
-    const canvas = document.getElementById('matrix-bg');
-    const ctx = canvas.getContext('2d');
-    let w = canvas.width = window.innerWidth;
-    let h = canvas.height = window.innerHeight;
-    let fontSize = 16;
-    let columns = Math.floor(w / fontSize);
-    let drops = [];
-    for (let x = 0; x < columns; x++) drops[x] = Math.random()*h/fontSize|0;
-    
-    function matrix() {
-      ctx.fillStyle = 'rgba(10,11,13,0.15)';
-      ctx.fillRect(0, 0, w, h);
-      ctx.font = fontSize + "px Fira Mono, monospace";
-      ctx.fillStyle = "#1aff6a";
-      for (let i = 0; i < columns; i++) {
-        let chr = String.fromCharCode(0x30A0 + Math.random() * 96);
-        ctx.fillText(chr, i * fontSize, drops[i] * fontSize);
-        if (Math.random() > 0.98) drops[i] = 0;
-        drops[i]++;
-      }
-    }
-    setInterval(matrix, 60);
-    
-    window.addEventListener('resize', () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      columns = Math.floor(w / fontSize);
-      drops = [];
-      for (let x = 0; x < columns; x++) drops[x] = Math.random()*h/fontSize|0;
-    });
 
-    // Core app logic (unchanged)
+  <script>
     const form = document.getElementById("codeForm");
     const input = document.getElementById("codeInput");
     const resultsDiv = document.getElementById("results");
@@ -282,21 +229,25 @@
       }
       resultsDiv.textContent = "Checking URLs, please wait...";
       form.querySelector("button").disabled = true;
+
       try {
         const resp = await fetch("/check", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({code})
+          body: JSON.stringify({ code })
         });
+
         if (!resp.ok) {
           const errData = await resp.json();
           resultsDiv.textContent = `Error: ${errData.error || resp.statusText}`;
           form.querySelector("button").disabled = false;
           return;
         }
+
         const data = await resp.json();
         resultsDiv.innerHTML = "";
         let foundAny = false;
+
         data.forEach(item => {
           if (item.valid) {
             foundAny = true;
@@ -305,12 +256,14 @@
             resultsDiv.innerHTML += `<div class="error">⚠️ Error checking ${item.url}: ${item.error}</div>`;
           }
         });
+
         if (!foundAny) {
           resultsDiv.textContent = "No valid links found.";
         }
       } catch (err) {
         resultsDiv.textContent = "An error occurred: " + err.message;
       }
+
       form.querySelector("button").disabled = false;
     });
   </script>
