@@ -95,7 +95,7 @@ async def check_links(code):
                 try:
                     async with session.get(url, allow_redirects=True) as resp:
                         final_url = str(resp.url)
-                        if resp.status in [200, 301, 302, 307, 308]:
+                        if resp.status in [200, 301, 302, 307, 308, 429]:
                             results.append({"url": url, "valid" : True, "status": resp.status})
                 except Exception as e:
                     results.append({"url": url, "valid": False, "error": str(e)})
@@ -128,4 +128,5 @@ if __name__ == "__main__":
 
 
 #OneDrive\Desktop\ekanshcutiekaidentifier
+
 
