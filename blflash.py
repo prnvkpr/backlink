@@ -20,7 +20,7 @@ group_0_10 = [
     { "regex": r"^[a-z0-9]{6}$", "url": "http://prnt.sc/$URL" },
     { "regex": r"^[a-z0-9]{5}$", "url": "https://goo.gl/$URL" },
     { "regex": r"^[a-zA-Z0-9]{8}$", "url": "http://pastebin.com/$URL" },
-    { "regex": r"^[a-zA-Z0-9]{8}$", "url": "http://bin.rex.wf/$URL" },
+    { "regex": r"^[a-zA-Z0-9]{8}$", "url": "https://bin.rex.wf/$URL" },
     { "regex": r"^[a-z0-9]{8}$", "url": "https://clyp.it/$URL" },
     { "regex": r"^2\/[a-zA-Z0-9_-]{10}$", "url": "https://ctxt.io/$URL" },
     { "regex": r"^[a-zA-Z0-9-]{10}$", "url": "https://ctxt.io/2/$URL" },
@@ -132,6 +132,7 @@ if __name__ == "__main__":
 
 
 #OneDrive\Desktop\ekanshcutiekaidentifier
+
 
 
 
